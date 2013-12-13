@@ -57,7 +57,7 @@ module LanguagePack
     # @param [String] command to be run
     # @return [String] output of stdout
     def run_stdout(command, options = {})
-      options[:out] ||= '2>/dev/null')
+      options[:out] ||= '2>/dev/null'
       run(command, options)
     end
 
