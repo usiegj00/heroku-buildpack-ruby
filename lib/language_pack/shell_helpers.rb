@@ -3,12 +3,12 @@ require 'shellwords'
 module LanguagePack
   module ShellHelpers
 
-    def self.user_env
-      @@user_env ||= {}
+    def self.user_env_hash
+      @@user_env_hash ||= {}
     end
 
-    def user_env
-      @@user_env
+    def user_env_hash
+      @@user_env_hash
     end
 
 
@@ -19,7 +19,7 @@ module LanguagePack
     def self.initialize_env(file)
       if File.exists?(file)
         File.read(file).split("\n").map {|x| x.split("=") }.each do |k,v|
-          user_env[k.strip] = v.strip unless blacklist?(k.strip)
+          user_env_hash[k.strip] = v.strip unless blacklist?(k.strip)
         end
       end
     end
@@ -36,38 +36,41 @@ module LanguagePack
       exit 1
     end
 
-    def run!(command)
-      result = run(command)
+    def run!(command, options = {})
+      result = run(command, options)
       error("Command: '#{command}' failed unexpectedly:\n#{result}") unless $?.success?
       return result
     end
 
-    def run_with_env(command, options = {})
-      out = options[:out] || "2>&1"
-      env = user_env.merge(options[:env]||{}).map {|key, value| "#{key}=#{value}"}.join(" ")
-      run("env #{env} #{command}", out)
-    end
-
     # run a shell comannd and pipe stderr to stdout
     # @param [String] command to be run
-    # @param [out] optional IO redirect
+    # @param [options] optional IO redirect
     # @return [String] output of stdout and stderr
-    def run(command, out = "2>&1")
-      %x{ bash -c #{command.shellescape} #{out} }
+
+    def run(command, options = {})
+      options[:out] ||= "2>&1"
+      options[:env] ||= {}
+      options[:env] = user_env_hash.merge(options[:env]) if options[:user_env]
+      env           = options[:env].map {|key, value| "#{key}=#{value}"}.join(" ")
+      %x{ bash -c #{env} #{command.shellescape} #{out} }
     end
 
     # run a shell command and pipe stderr to /dev/null
     # @param [String] command to be run
     # @return [String] output of stdout
-    def run_stdout(command)
-      run(command, '2>dev/null')
+    def run_stdout(command, options = {})
+      options[:out] ||= '2>/dev/null')
+      run(command, options)
     end
 
     # run a shell command and stream the output
     # @param [String] command to be run
-    def pipe(command)
+    def pipe(command, options = {})
       output = ""
-      IO.popen(command) do |io|
+      options[:env] ||= {}
+      options[:env] = user_env_hash.merge(options[:env]) if options[:user_env]
+      env = options[:env].map {|key, value| "#{key}=#{value}"}.join(" ")
+      IO.popen("#{env} #{command}") do |io|
         until io.eof?
           buffer = io.gets
           output << buffer
