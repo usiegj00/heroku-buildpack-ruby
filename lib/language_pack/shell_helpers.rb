@@ -2,8 +2,10 @@ require 'shellwords'
 
 module LanguagePack
   module ShellHelpers
+    @@user_env_hash = {}
+
     def self.user_env_hash
-      @@user_env_hash ||= {}
+      @@user_env_hash
     end
 
     def user_env_hash
