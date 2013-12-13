@@ -44,7 +44,7 @@ module LanguagePack
 
     def run_with_env(command, options = {})
       out = options[:out] || "2>&1"
-      env = user_env.merge(options[:env]||{}]).map {|key, value| "#{key}=#{value}"}.join(" ")
+      env = user_env.merge(options[:env]||{}).map {|key, value| "#{key}=#{value}"}.join(" ")
       run("env #{env} #{command}", out)
     end
 
