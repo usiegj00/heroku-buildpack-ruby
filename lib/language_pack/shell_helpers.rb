@@ -14,12 +14,6 @@ module LanguagePack
       exit 1
     end
 
-    # run a shell comannd and pipe stderr to stdout
-    # @param [String] command to be run
-    # @return [String] output of stdout and stderr
-    def run(command)
-      %x{ bash -c #{command.shellescape} 2>&1 }
-    end
 
     def run!(command)
       result = run(command)
@@ -27,11 +21,19 @@ module LanguagePack
       return result
     end
 
+    # run a shell comannd and pipe stderr to stdout
+    # @param [String] command to be run
+    # @param [out] optional IO redirect
+    # @return [String] output of stdout and stderr
+    def run(command, out = "2>&1")
+      %x{ bash -c #{command.shellescape} #{out} }
+    end
+
     # run a shell command and pipe stderr to /dev/null
     # @param [String] command to be run
     # @return [String] output of stdout
     def run_stdout(command)
-      %x{ bash -c  #{command.shellescape} 2>/dev/null }
+      run(command, '2>dev/null')
     end
 
     # run a shell command and stream the output
