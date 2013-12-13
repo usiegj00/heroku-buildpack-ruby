@@ -39,7 +39,7 @@ class LanguagePack::Helpers::RakeRunner
       cmd = cmd || @command
       puts "Running: rake #{@task}"
       time = Benchmark.realtime do
-        self.output = pipe(cmd)
+        self.output = pipe(cmd, user_env: true)
       end
       self.time = time
 
@@ -76,7 +76,7 @@ class LanguagePack::Helpers::RakeRunner
 
   def load_rake_tasks
     instrument "ruby.rake_task_defined" do
-      @rake_tasks        ||= run("env PATH=$PATH bundle exec rake -P --trace")
+      @rake_tasks        ||= run("bundle exec rake -P --trace", user_env: true)
       @rakefile_can_load ||= $?.success?
       @rake_tasks
     end
