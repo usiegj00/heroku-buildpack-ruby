@@ -2,7 +2,6 @@ require 'shellwords'
 
 module LanguagePack
   module ShellHelpers
-
     def self.user_env_hash
       @@user_env_hash ||= {}
     end
@@ -41,11 +40,11 @@ module LanguagePack
       return result
     end
 
-    # run a shell comannd and pipe stderr to stdout
-    # @param [String] command to be run
-    # @param [options] optional IO redirect
-    # @return [String] output of stdout and stderr
-
+    # run a shell command and pipe stderr to stdout
+    # @param [String] command
+    # @option options [String] :out the IO redirect of the command
+    # @option options [Hash] :env explicit environment to run command in
+    # @option options [Boolean] :user_env whether or not a user's environment variables will be loaded
     def run(command, options = {})
       options[:out] ||= "2>&1"
       options[:env] ||= {}
