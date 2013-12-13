@@ -2,6 +2,28 @@ require 'shellwords'
 
 module LanguagePack
   module ShellHelpers
+
+    def self.user_env
+      @@user_env ||= {}
+    end
+
+    def user_env
+      @@user_env
+    end
+
+
+    def self.blacklist?(key)
+      false
+    end
+
+    def self.initialize_env(file)
+      if File.exists?(file)
+        File.read(file).split("\n").map {|x| x.split("=") }.each do |k,v|
+          user_env[k.strip] = v.strip unless blacklist?(k.strip)
+        end
+      end
+    end
+
     # display error message and stop the build process
     # @param [String] error message
     def error(message)
@@ -14,11 +36,16 @@ module LanguagePack
       exit 1
     end
 
-
     def run!(command)
       result = run(command)
       error("Command: '#{command}' failed unexpectedly:\n#{result}") unless $?.success?
       return result
+    end
+
+    def run_with_env(command, options = {})
+      out = options[:out] || "2>&1"
+      env = user_env.merge(options[:env]||{}]).map {|key, value| "#{key}=#{value}"}.join(" ")
+      run("env #{env} #{command}", out)
     end
 
     # run a shell comannd and pipe stderr to stdout
