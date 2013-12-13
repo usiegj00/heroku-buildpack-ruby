@@ -11,14 +11,13 @@ module LanguagePack
       @@user_env_hash
     end
 
-
     def self.blacklist?(key)
       false
     end
 
-    def self.initialize_env(file)
-      if File.exists?(file)
-        File.read(file).split("\n").map {|x| x.split("=") }.each do |k,v|
+    def self.initialize_env(path)
+      if file = Pathname.new("#{path}") && file.exist?
+        file.read.split("\n").map {|x| x.split("=") }.each do |k,v|
           user_env_hash[k.strip] = v.strip unless blacklist?(k.strip)
         end
       end
