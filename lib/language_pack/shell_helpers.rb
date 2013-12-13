@@ -52,7 +52,7 @@ module LanguagePack
       options[:env] ||= {}
       options[:env] = user_env_hash.merge(options[:env]) if options[:user_env]
       env           = options[:env].map {|key, value| "#{key}=#{value}"}.join(" ")
-      %x{ bash -c #{env} #{command.shellescape} #{out} }
+      %x{ bash -c #{env} #{command.shellescape} #{options[:out]} }
     end
 
     # run a shell command and pipe stderr to /dev/null
@@ -70,7 +70,7 @@ module LanguagePack
       options[:env] ||= {}
       options[:env] = user_env_hash.merge(options[:env]) if options[:user_env]
       env = options[:env].map {|key, value| "#{key}=#{value}"}.join(" ")
-      IO.popen("#{env} #{command}") do |io|
+      IO.popen("#{env} #{command} #{options[:out]}") do |io|
         until io.eof?
           buffer = io.gets
           output << buffer
