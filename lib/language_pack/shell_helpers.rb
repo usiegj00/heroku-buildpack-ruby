@@ -17,7 +17,8 @@ module LanguagePack
     end
 
     def self.initialize_env(path)
-      if file = Pathname.new("#{path}") && file.exist?
+      file = Pathname.new("#{path}")
+      if file.exist?
         file.read.split("\n").map {|x| x.split("=") }.each do |k,v|
           user_env_hash[k.strip] = v.strip unless blacklist?(k.strip)
         end
