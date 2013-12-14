@@ -58,8 +58,6 @@ private
   def run_assets_precompile_rake_task
     instrument "rails3.run_assets_precompile_rake_task" do
       log("assets_precompile") do
-        setup_database_url_env
-
         precompile = rake.task("assets:precompile")
         return true unless precompile.is_defined?
 
@@ -69,10 +67,14 @@ private
           return true
         end
 
-        ENV["RAILS_GROUPS"] ||= "assets"
-        ENV["RAILS_ENV"]    ||= "production"
+        default_env = {
+          "RAILS_GROUPS" => "assets",
+          "RAILS_ENV"    => "production",
+          "DATABASE_URL" => default_database_url
+        }
 
-        precompile.invoke
+        precompile.invoke(env: default_env.merge(user_env_hash))
+
         if precompile.success?
           log "assets_precompile", :status => "success"
           puts "Asset precompilation completed (#{"%.2f" % precompile.time}s)"
@@ -84,8 +86,8 @@ private
     end
   end
 
-  # setup the database url as an environment variable
-  def setup_database_url_env
+  # generate a dummy database_url
+  def default_database_url
     instrument "rails3.setup_database_url_env" do
       ENV["DATABASE_URL"] ||= begin
         # need to use a dummy DATABASE_URL here, so rails can load the environment

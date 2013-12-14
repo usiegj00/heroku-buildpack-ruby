@@ -71,8 +71,6 @@ WARNING
   def run_assets_precompile_rake_task
     instrument "rails4.run_assets_precompile_rake_task" do
       log("assets_precompile") do
-        setup_database_url_env
-
         precompile = rake.task("assets:precompile")
         return true unless precompile.is_defined?
 
@@ -82,13 +80,17 @@ WARNING
         end
 
         topic("Preparing app for Rails asset pipeline")
-        ENV["RAILS_GROUPS"] ||= "assets"
-        ENV["RAILS_ENV"]    ||= "production"
 
         @cache.load public_assets_folder
         @cache.load default_assets_cache
 
-        precompile.invoke
+        default_env = {
+          "RAILS_GROUPS" => "assets",
+          "RAILS_ENV"    => "production",
+          "DATABASE_URL" => default_database_url
+        }
+
+        precompile.invoke(env: default_env.merge(user_env_hash))
 
         if precompile.success?
           log "assets_precompile", :status => "success"
