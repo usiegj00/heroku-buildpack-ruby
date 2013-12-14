@@ -68,10 +68,11 @@ module LanguagePack
     # @param [String] command to be run
     def pipe(command, options = {})
       output = ""
+      options[:out] ||= "2>&1"
       options[:env] ||= {}
       options[:env] = user_env_hash.merge(options[:env]) if options[:user_env]
       env = options[:env].map {|key, value| "#{key}=#{value}"}.join(" ")
-      IO.popen("#{env} #{command} #{options[:out]}") do |io|
+      IO.popen("env #{env} #{command} #{options[:out]}") do |io|
         until io.eof?
           buffer = io.gets
           output << buffer
