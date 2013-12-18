@@ -84,11 +84,19 @@ WARNING
         @cache.load public_assets_folder
         @cache.load default_assets_cache
 
-        default_env = {
-          "RAILS_GROUPS" => "assets",
-          "RAILS_ENV"    => "production",
-          "DATABASE_URL" => default_database_url
-        }
+        if user_env_hash.empty?
+          default_env = {
+            "RAILS_GROUPS" => ENV["RAILS_GROUPS"] || "assets",
+            "RAILS_ENV"    => ENV["RAILS_ENV"]    || "production",
+            "DATABASE_URL" => default_database_url
+          }
+        else
+          default_env = {
+            "RAILS_GROUPS" => "assets",
+            "RAILS_ENV"    => "production",
+            "DATABASE_URL" => default_database_url
+          }
+        end
 
         precompile.invoke(env: default_env.merge(user_env_hash))
 
