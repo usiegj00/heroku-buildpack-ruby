@@ -499,6 +499,10 @@ FILE
     git = Git.open(".")
     git.add_tag(new_version)
     puts "Created tag #{new_version}"
+
+    remote = git.remotes.detect {|remote| remote.url.match(%r{heroku/heroku-buildpack-ruby.git$}) }
+    puts "Pushing tag to remote #{remote}"
+    git.push(remote, nil, true)
   end
 end
 
