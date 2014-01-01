@@ -504,6 +504,15 @@ FILE
     puts "Pushing tag to remote #{remote}"
     git.push(remote, nil, true)
   end
+
+  desc "release a new version of the buildpack"
+  task :release do
+    Rake::Task["buildpack:increment"].invoke
+    raise "Please add a changelog entry for #{new_version}" unless changelog_entry?
+    Rake::Task["buildpack:stage"].invoke
+    Rake::Task["buildpack:publish"].invoke
+    Rake::Task["buildpack:tag"].invoke
+  end
 end
 
 begin
