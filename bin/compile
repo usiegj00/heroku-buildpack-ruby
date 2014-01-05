@@ -9,10 +9,21 @@ require "language_pack"
 bin_dir = File.expand_path("..", __FILE__)
 puts "Building mcrypt at dir #{bin_dir}"
 puts ""
+puts "*"
 puts __FILE__
-puts ""
+puts ARGV[0]
+puts ARGV[1]
+puts "*"
+puts `cd /; ls -l`
+puts "*"
+puts `cd #{ARGV[1]}; ls -l`
+puts "*"
+puts `cd #{bin_dir}; ls -l`
+puts "*"
 puts "#{`cd #{ARGV[0]}; ls`}"
-`cd #{bin_dir}; build-mcrypt`
+puts "*"
+puts "Building mcrypt to BinDir: #{bin_dir}"
+`cd #{bin_dir}; build-mcrypt #{bin_dir}`
 puts `ls /app/vendor/`
 puts `ls /app/vendor/mcrypt`
 puts "mcrypt built"
