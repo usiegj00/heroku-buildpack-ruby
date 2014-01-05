@@ -17,10 +17,11 @@ tar jxf $mcrypt_archive_name
 
 # Build and install mcrypt.
 pushd $mcrypt_dirname
-./configure --prefix=/app/vendor/mcrypt \
-  --disable-posix-threads --enable-dynamic-loading
+./configure --prefix=/app/vendor/mcrypt --disable-posix-threads --enable-dynamic-loading
 make -s
 make install -s
 popd
 
 
+# gem install ruby-mcrypt -- --with-mcrypt-dir=/app/vendor/mcrypt
+# gem install ruby-mcrypt -- --with-mcrypt-include=/app/vendor/mcrypt/include --with-mcrypt-lib=/app/vendor/mcrypt/lib

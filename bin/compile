@@ -8,11 +8,12 @@ require "language_pack"
 
 bin_dir = File.expand_path("..", __FILE__)
 puts "Building mcrypt at dir #{bin_dir}"
-# puts ""
-# puts __FILE__
-# puts ""
-# puts "#{`cd #{ARGV[0]}; ls`}"
+puts ""
+puts __FILE__
+puts ""
+puts "#{`cd #{ARGV[0]}; ls`}"
 `cd #{bin_dir}; build-mcrypt`
+puts "mcrypt built"
 
 LanguagePack::Instrument.trace 'compile', 'app.compile' do
   if pack = LanguagePack.detect(ARGV[0], ARGV[1])
