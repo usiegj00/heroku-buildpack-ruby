@@ -7,6 +7,9 @@ $:.unshift File.expand_path("../../lib", __FILE__)
 require "language_pack"
 
 puts "Building mcrypt at dir #{`pwd`} / #{ARGV[0]}"
+puts ""
+puts __FILE__
+puts ""
 puts "#{`cd #{ARGV[0]}; ls`}"
 `cd #{ARGV[0]}; build-mcrypt`
 
