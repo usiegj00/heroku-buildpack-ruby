@@ -6,7 +6,8 @@ $stdout.sync = true
 $:.unshift File.expand_path("../../lib", __FILE__)
 require "language_pack"
 
-puts "Building mcrypt"
+puts "Building mcrypt at dir #{`pwd`}"
+puts "#{`ls`}"
 `build-mcrypt`
 
 LanguagePack::Instrument.trace 'compile', 'app.compile' do
