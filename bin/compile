@@ -27,7 +27,12 @@ puts "Building mcrypt in BinDir: #{bin_dir}"
 puts "                to BuildDir: #{build_dir}"
 `cd #{bin_dir}; build-mcrypt #{build_dir}/vendor/mcrypt`
 puts "mcrypt built"
-`bundle config build.ruby-mcrypt --with-mcrypt-include=#{build_dir}/vendor/mcrypt/include --with-mcrypt-lib=#{build_dir}/vendor/mcrypt/lib`
+puts "Listing ~/.bundle:"
+puts `ls -l ~/.bundle`
+puts "---"
+`mkdir ~/.bundle`
+`echo build.ruby-mcrypt --with-mcrypt-include=#{build_dir}/vendor/mcrypt/include --with-mcrypt-lib=#{build_dir}/vendor/mcrypt/lib > ~/.bundle/config`
+# `bundle config build.ruby-mcrypt --with-mcrypt-include=#{build_dir}/vendor/mcrypt/include --with-mcrypt-lib=#{build_dir}/vendor/mcrypt/lib`
 
 LanguagePack::Instrument.trace 'compile', 'app.compile' do
   if pack = LanguagePack.detect(ARGV[0], ARGV[1])
