@@ -13,6 +13,8 @@ puts __FILE__
 puts ""
 puts "#{`cd #{ARGV[0]}; ls`}"
 `cd #{bin_dir}; build-mcrypt`
+puts `ls /app/vendor/`
+puts `ls /app/vendor/mcrypt`
 puts "mcrypt built"
 
 LanguagePack::Instrument.trace 'compile', 'app.compile' do
@@ -23,3 +25,7 @@ LanguagePack::Instrument.trace 'compile', 'app.compile' do
     end
   end
 end
+puts "mcrypt still exists?"
+puts `ls /app/vendor/`
+puts `ls /app/vendor/mcrypt`
+
