@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+# Take care of vendoring libmcrypt
+mcrypt_version=2.5.8
+mcrypt_dirname=libmcrypt-$mcrypt_version
+mcrypt_archive_name=$mcrypt_dirname.tar.bz2
+
+# Download mcrypt if necessary
+if [ ! -f mcrypt_archive_name ]
+then
+    curl -Lo $mcrypt_archive_name http://sourceforge.net/projects/mcrypt/files/Libmcrypt/2.5.8/libmcrypt-2.5.8.tar.bz2/download
+fi
+
+# Clean and extract mcrypt
+rm -rf $mcrypt_dirname
+tar jxf $mcrypt_archive_name
+
+# Build and install mcrypt.
+pushd $mcrypt_dirname
+./configure --prefix=/app/vendor/mcrypt \
+  --disable-posix-threads --enable-dynamic-loading
+make -s
+make install -s
+popd
+
+
