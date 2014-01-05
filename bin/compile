@@ -7,6 +7,7 @@ $:.unshift File.expand_path("../../lib", __FILE__)
 require "language_pack"
 
 bin_dir = File.expand_path("..", __FILE__)
+build_dir = ARGV[0]
 puts "Building mcrypt at dir #{bin_dir}"
 puts ""
 puts "*"
@@ -22,10 +23,9 @@ puts `cd #{bin_dir}; ls -l`
 puts "*"
 puts "#{`cd #{ARGV[0]}; ls`}"
 puts "*"
-puts "Building mcrypt to BinDir: #{bin_dir}"
-`cd #{bin_dir}; build-mcrypt #{bin_dir}`
-puts `ls /app/vendor/`
-puts `ls /app/vendor/mcrypt`
+puts "Building mcrypt in BinDir: #{bin_dir}"
+puts "                to BuildDir: #{build_dir}"
+`cd #{bin_dir}; build-mcrypt #{build_dir}`
 puts "mcrypt built"
 
 LanguagePack::Instrument.trace 'compile', 'app.compile' do
@@ -37,6 +37,9 @@ LanguagePack::Instrument.trace 'compile', 'app.compile' do
   end
 end
 puts "mcrypt still exists?"
-puts `ls /app/vendor/`
-puts `ls /app/vendor/mcrypt`
 
+puts "---"
+puts `ls #{bin_dir}`
+puts "---"
+puts `ls #{build_dir}`
+puts "---"
