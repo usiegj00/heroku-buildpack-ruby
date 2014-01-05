@@ -31,19 +31,8 @@ puts "Listing ~/.bundle:"
 puts `ls -l ~/.bundle`
 puts "---"
 # `mkdir ~/.bundle`
-`echo build.ruby-mcrypt --with-mcrypt-include=#{build_dir}/vendor/mcrypt/include --with-mcrypt-lib=#{build_dir}/vendor/mcrypt/lib >> ~/.bundle/config`
+# `echo build.ruby-mcrypt --with-mcrypt-include=#{build_dir}/vendor/mcrypt/include --with-mcrypt-lib=#{build_dir}/vendor/mcrypt/lib >> ~/.bundle/config`
 # `bundle config build.ruby-mcrypt --with-mcrypt-include=#{build_dir}/vendor/mcrypt/include --with-mcrypt-lib=#{build_dir}/vendor/mcrypt/lib`
-
-puts "---"
-puts "Listing #{build_dir}/.bundle:"
-`mkdir #{build_dir}/.bundle`
-# ---
-# BUNDLE_BUILD__RUBY-MCRYPT: "--with-mcrypt-include=#{build_dir}/vendor/mcrypt/include
-#  --with-mcrypt-lib=#{build_dir}/vendor/mcrypt/lib"
-`echo "---" > #{build_dir}/.bundle/.config`
-`echo "BUNDLE_BUILD__RUBY-MCRYPT: \\"--with-mcrypt-include=#{build_dir}/vendor/mcrypt/include" > #{build_dir}/.bundle/.config`
-`echo "  --with-mcrypt-lib=#{build_dir}/vendor/mcrypt/lib\\"" > #{build_dir}/.bundle/.config`
-# build.ruby-mcrypt --with-mcrypt-include=#{build_dir}/vendor/mcrypt/include --with-mcrypt-lib=#{build_dir}/vendor/mcrypt/lib >> #{build_dir}/.bundle/config`
 
 LanguagePack::Instrument.trace 'compile', 'app.compile' do
   if pack = LanguagePack.detect(ARGV[0], ARGV[1])

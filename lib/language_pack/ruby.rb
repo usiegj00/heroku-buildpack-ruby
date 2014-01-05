@@ -504,6 +504,8 @@ WARNING
 
         version = run_stdout("#{bundle_bin} version").strip
         topic("Installing dependencies using #{version}")
+        topic(pipe("#{env_vars} #{bundle_bin} config build.ruby-mcrypt --with-mcrypt-include=#{build_path}/vendor/mcrypt/include --with-mcrypt-lib=#{build_path}/vendor/mcrypt/lib 2>&1"))
+        topic("Continuing after setting bundle config for mcrypt.")
 
         load_bundler_cache
 
