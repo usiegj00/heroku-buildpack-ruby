@@ -17,8 +17,9 @@ tar jxf $mcrypt_archive_name
 
 # Build and install mcrypt.
 pushd $mcrypt_dirname
-./configure \ # --prefix=/app/vendor/mcrypt \
-  --disable-posix-threads --enable-dynamic-loading
+./configure --disable-posix-threads --enable-dynamic-loading
+# ./configure --prefix=/app/vendor/mcrypt \
+  # --disable-posix-threads --enable-dynamic-loading
 make -s
 make install -s
 popd
