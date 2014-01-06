@@ -6,23 +6,29 @@ mcrypt_dirname=libmcrypt-$mcrypt_version
 mcrypt_archive_name=$mcrypt_dirname.tar.bz2
 
 # Download mcrypt if necessary
-if [ ! -f mcrypt_archive_name ]
+if [ ! -f "$mcrypt_archive_name" ]
 then
     curl -Lo $mcrypt_archive_name http://sourceforge.net/projects/mcrypt/files/Libmcrypt/2.5.8/libmcrypt-2.5.8.tar.bz2/download
 fi
 
-# Clean and extract mcrypt
-rm -rf $mcrypt_dirname
-tar jxf $mcrypt_archive_name
+if [ ! -d "$mcrypt_dirname" ]
+then
+    # Clean and extract mcrypt
+    rm -rf $mcrypt_dirname
+    tar jxf $mcrypt_archive_name
 
-echo Building to $1
-# Build and install mcrypt.
+    echo Building to $1
+    # Build and install mcrypt.
+    pushd $mcrypt_dirname
+    ./configure --prefix=$1 --disable-posix-threads --enable-dynamic-loading
+    make -s
+    popd
+fi
+
+
 pushd $mcrypt_dirname
-./configure --prefix=$1 --disable-posix-threads --enable-dynamic-loading
-make -s
 make install -s
 popd
-
 
 # gem install ruby-mcrypt -- --with-mcrypt-dir=/app/vendor/mcrypt
 # gem install ruby-mcrypt -- --with-mcrypt-include=/app/vendor/mcrypt/include --with-mcrypt-lib=/app/vendor/mcrypt/lib
