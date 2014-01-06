@@ -504,8 +504,13 @@ WARNING
 
         version = run_stdout("#{bundle_bin} version").strip
         topic("Installing dependencies using #{version}")
+
+
+        env_vars       = "env BUNDLE_GEMFILE=#{pwd}/Gemfile BUNDLE_CONFIG=#{pwd}/.bundle/config CPATH=#{yaml_include}:$CPATH CPPATH=#{yaml_include}:$CPPATH LIBRARY_PATH=#{yaml_lib}:$LIBRARY_PATH RUBYOPT=\"#{syck_hack}\" NOKOGIRI_USE_SYSTEM_LIBRARIES=true"
+        env_vars      += " BUNDLER_LIB_PATH=#{bundler_path}" if ruby_version.ruby_version == "1.8.7"
         topic(pipe("#{env_vars} #{bundle_bin} config build.ruby-mcrypt --with-mcrypt-include=#{build_path}/vendor/mcrypt/include --with-mcrypt-lib=#{build_path}/vendor/mcrypt/lib 2>&1"))
         topic("Continuing after setting bundle config for mcrypt.")
+
 
         load_bundler_cache
 
