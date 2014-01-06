@@ -527,7 +527,7 @@ WARNING
 
 
 
-          topic(pipe("#{env_vars} #{bundle_bin} config build.ruby-mcrypt --with-mcrypt-include=#{build_path}/vendor/mcrypt/include --with-mcrypt-lib=#{build_path}/vendor/mcrypt/lib 2>&1"))
+          topic(pipe("#{env_vars} #{bundle_bin} config build.ruby-mcrypt '--with-mcrypt-include=#{build_path}/vendor/mcrypt/include --with-mcrypt-lib=#{build_path}/vendor/mcrypt/lib' 2>&1"))
           topic("Continuing after setting bundle config for mcrypt.")
 
 
